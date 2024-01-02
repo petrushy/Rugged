@@ -261,19 +261,8 @@ public class PythonTile implements Tile {
     @Override
     public native double interpolateElevation(double latitude, double longitude);
 
-    /**
-     * Find the intersection of a line-of-sight and a Digital Elevation Model cell.
-     *
-     * @param p              point on the line
-     * @param los            line-of-sight, in the topocentric frame (East, North, Zenith) of the point,
-     *                       scaled to match radians in the horizontal plane and meters along the vertical axis
-     * @param latitudeIndex  latitude index of the Digital Elevation Model cell
-     * @param longitudeIndex longitude index of the Digital Elevation Model cell
-     * @return point corresponding to line-of-sight crossing the Digital Elevation Model surface
-     * if it lies within the cell, null otherwise
-     */
     @Override
-    public native NormalizedGeodeticPoint cellIntersection(GeodeticPoint p, Vector3D los, int latitudeIndex, int longitudeIndex);
+    public native NormalizedGeodeticPoint cellIntersection(NormalizedGeodeticPoint p, Vector3D los, int latitudeIndex, int longitudeIndex);
 
     /**
      * Check if a tile covers a ground point.

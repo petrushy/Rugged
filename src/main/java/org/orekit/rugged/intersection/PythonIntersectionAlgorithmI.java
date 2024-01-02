@@ -23,6 +23,7 @@
 package org.orekit.rugged.intersection;
 
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
+import org.orekit.rugged.api.AlgorithmId;
 import org.orekit.rugged.raster.Tile;
 import org.orekit.rugged.utils.ExtendedEllipsoid;
 import org.orekit.rugged.utils.NormalizedGeodeticPoint;
@@ -55,43 +56,18 @@ public class PythonIntersectionAlgorithmI implements IntersectionAlgorithm {
     public native void pythonDecRef();
 
 
-    /**
-     * Compute intersection of line with Digital Elevation Model.
-     *
-     * @param ellipsoid reference ellipsoid
-     * @param position  pixel position in ellipsoid frame
-     * @param los       pixel line-of-sight in ellipsoid frame
-     * @return point at which the line first enters ground
-     */
+    /** {@inheritDoc} */
     @Override
     public native NormalizedGeodeticPoint intersection(ExtendedEllipsoid ellipsoid, Vector3D position, Vector3D los);
 
-    /**
-     * Refine intersection of line with Digital Elevation Model.
-     * <p>
-     * This method is used to refine an intersection when a close guess is
-     * already known. The intersection is typically looked for by a direct
-     * {@link Tile#cellIntersection(GeodeticPoint,
-     * Vector3D, int, int) cell intersection} in the tile which already
-     * contains the close guess, or any similar very fast algorithm.
-     * </p>
-     *
-     * @param ellipsoid  reference ellipsoid
-     * @param position   pixel position in ellipsoid frame
-     * @param los        pixel line-of-sight in ellipsoid frame
-     * @param closeGuess guess close to the real intersection
-     * @return point at which the line first enters ground
-     */
+    /** {@inheritDoc} */
     @Override
     public native NormalizedGeodeticPoint refineIntersection(ExtendedEllipsoid ellipsoid, Vector3D position, Vector3D los, NormalizedGeodeticPoint closeGuess);
 
-    /**
-     * Get elevation at a given ground point.
-     *
-     * @param latitude  ground point latitude
-     * @param longitude ground point longitude
-     * @return elevation at specified point
-     */
+    /** {@inheritDoc} */
     @Override
     public native double getElevation(double latitude, double longitude);
+
+    @Override
+    public native AlgorithmId getAlgorithmId();
 }

@@ -21,10 +21,10 @@
 
 package org.orekit.rugged.los;
 
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.geometry.euclidean.threed.FieldVector3D;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
-import org.orekit.rugged.utils.DSGenerator;
+import org.orekit.rugged.utils.DerivativeGenerator;
 import org.orekit.utils.ParameterDriver;
 
 import java.util.stream.Stream;
@@ -56,46 +56,15 @@ public class PythonTimeIndependentLOSTransform implements TimeIndependentLOSTran
     /** Part of JCC Python interface to object */
     public native void pythonDecRef();
 
-
-    /**
-     * Transform a line-of-sight.
-     *
-     * @param i   los pixel index
-     * @param los line-of-sight to transform
-     * @return transformed line-of-sight
-     */
+    /** {@inheritDoc} */
     @Override
     public native Vector3D transformLOS(int i, Vector3D los);
 
-    /**
-     * Transform a line-of-sight and its partial derivatives.
-     * <p>
-     * This method is used for LOS calibration purposes. It allows to compute
-     * the Jacobian matrix of the LOS with respect to the parameters, which
-     * are typically polynomials coefficients representing rotation angles.
-     * These polynomials can be used for example to model thermo-elastic effects.
-     * </p>
-     * <p>
-     * Note that in order for the partial derivatives to be properly set up, the
-     * {@link ParameterDriver#setSelected(boolean) setSelected}
-     * method must have been set to {@code true} for the various parameters returned
-     * by {@link #getParametersDrivers()} that should be estimated.
-     * </p>
-     *
-     * @param index     los pixel index
-     * @param los       line-of-sight to transform
-     * @param generator generator to use for building {@link DerivativeStructure} instances
-     * @return line of sight, and its first partial derivatives with respect to the parameters
-     */
+    /** {@inheritDoc} */
     @Override
-    public native FieldVector3D<DerivativeStructure> transformLOS(int index, FieldVector3D<DerivativeStructure> los, DSGenerator generator);
+    public native <T extends Derivative<T>> FieldVector3D<T> transformLOS(int index, FieldVector3D<T> los, DerivativeGenerator<T> generator);
 
-    /**
-     * Get the drivers for LOS parameters.
-     *
-     * @return drivers for LOS parameters
-     * @since 2.0
-     */
+    /** {@inheritDoc} */
     @Override
     public native Stream<ParameterDriver> getParametersDrivers();
 }

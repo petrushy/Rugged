@@ -20,10 +20,12 @@
 
 package org.orekit.rugged.los;
 
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.geometry.euclidean.threed.FieldVector3D;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.orekit.rugged.utils.DSGenerator;
+import org.orekit.rugged.utils.DerivativeGenerator;
 import org.orekit.time.AbsoluteDate;
 import org.orekit.utils.ParameterDriver;
 
@@ -57,54 +59,19 @@ public class PythonTimeDependentLOS implements TimeDependentLOS {
     public native void pythonDecRef();
 
 
-    /**
-     * Get the number of pixels.
-     *
-     * @return number of pixels
-     */
+    /** {@inheritDoc} */
     @Override
     public native int getNbPixels();
 
-    /**
-     * Get the line of sight for a given date.
-     *
-     * @param index los pixel index
-     * @param date  date
-     * @return line of sight
-     */
+    /** {@inheritDoc} */
     @Override
     public native Vector3D getLOS(int index, AbsoluteDate date);
-
-    /**
-     * Get the line of sight and its partial derivatives for a given date.
-     * <p>
-     * This method is used for LOS calibration purposes. It allows to compute
-     * the Jacobian matrix of the LOS with respect to the estimated parameters, which
-     * are typically polynomials coefficients representing rotation angles.
-     * These polynomials can be used for example to model thermo-elastic effects.
-     * </p>
-     * <p>
-     * Note that in order for the partial derivatives to be properly set up, the
-     * {@link ParameterDriver#setSelected(boolean) setSelected}
-     * method must have been set to {@code true} for the various parameters returned
-     * by {@link #getParametersDrivers()} that should be estimated.
-     * </p>
-     *
-     * @param index     los pixel index
-     * @param date      date
-     * @param generator generator to use for building {@link DerivativeStructure} instances
-     * @return line of sight, and its first partial derivatives with respect to the parameters
-     * @since 2.0
-     */
+    /** {@inheritDoc} */
     @Override
-    public native FieldVector3D<DerivativeStructure> getLOSDerivatives(int index, AbsoluteDate date, DSGenerator generator);
+    public native <T extends Derivative<T>> FieldVector3D<T> getLOSDerivatives(int index, AbsoluteDate date, DerivativeGenerator<T> generator);
 
-    /**
-     * Get the drivers for LOS parameters.
-     *
-     * @return drivers for LOS parameters
-     * @since 2.0
-     */
+
+    /** {@inheritDoc} */
     @Override
     public native Stream<ParameterDriver> getParametersDrivers();
 }
