@@ -1,5 +1,5 @@
-/* Copyright 2013-2019 CS Systèmes d'Information
- * Licensed to CS Systèmes d'Information (CS) under one or more
+/* Copyright 2013-2022 CS GROUP
+ * Licensed to CS GROUP (CS) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * CS licenses this file to You under the Apache License, Version 2.0
@@ -32,8 +32,6 @@ import org.orekit.bodies.OneAxisEllipsoid;
 import org.orekit.frames.Frame;
 import org.orekit.frames.FramesFactory;
 import org.orekit.propagation.Propagator;
-import org.orekit.propagation.SpacecraftState;
-import org.orekit.propagation.sampling.OrekitFixedStepHandler;
 import org.orekit.rugged.errors.RuggedException;
 import org.orekit.rugged.errors.RuggedInternalError;
 import org.orekit.rugged.errors.RuggedMessages;
@@ -173,7 +171,7 @@ public class RuggedBuilder {
      * </p>
      */
     public RuggedBuilder() {
-        sensors                     = new ArrayList<LineSensor>();
+        sensors                     = new ArrayList<>();
         constantElevation           = Double.NaN;
         lightTimeCorrection         = true;
         aberrationOfLightCorrection = true;
@@ -730,22 +728,17 @@ public class RuggedBuilder {
 
         // extract position/attitude samples from propagator
         final List<TimeStampedPVCoordinates> positionsVelocities =
-                new ArrayList<TimeStampedPVCoordinates>();
+                new ArrayList<>();
         final List<TimeStampedAngularCoordinates> quaternions =
-                new ArrayList<TimeStampedAngularCoordinates>();
-        propagator.setMasterMode(interpolationStep, new OrekitFixedStepHandler() {
-
-            /** {@inheritDoc} */
-            @Override
-            public void handleStep(final SpacecraftState currentState, final boolean isLast) {
+                new ArrayList<>();
+        propagator.getMultiplexer().add(interpolationStep,
+            currentState -> {
                 final AbsoluteDate  date = currentState.getDate();
                 final PVCoordinates pv   = currentState.getPVCoordinates(inertialFrame);
                 final Rotation      q    = currentState.getAttitude().getRotation();
                 positionsVelocities.add(new TimeStampedPVCoordinates(date, pv.getPosition(), pv.getVelocity(), Vector3D.ZERO));
                 quaternions.add(new TimeStampedAngularCoordinates(date, q, Vector3D.ZERO, Vector3D.ZERO));
-            }
-
-        });
+            });
         propagator.propagate(minDate.shiftedBy(-interpolationStep), maxDate.shiftedBy(interpolationStep));
 
         // orbit/attitude to body converter
@@ -918,15 +911,21 @@ public class RuggedBuilder {
         // set up the ellipsoid
         switch (ellipsoidID) {
             case GRS80 :
-                return new OneAxisEllipsoid(6378137.0, 1.0 / 298.257222101, bodyFrame);
+                return new OneAxisEllipsoid(Constants.GRS80_EARTH_EQUATORIAL_RADIUS,
+                                            Constants.GRS80_EARTH_FLATTENING,
+                                            bodyFrame);
             case WGS84 :
                 return new OneAxisEllipsoid(Constants.WGS84_EARTH_EQUATORIAL_RADIUS,
                                             Constants.WGS84_EARTH_FLATTENING,
                                             bodyFrame);
             case IERS96 :
-                return new OneAxisEllipsoid(6378136.49, 1.0 / 298.25645, bodyFrame);
+                return new OneAxisEllipsoid(Constants.IERS96_EARTH_EQUATORIAL_RADIUS,
+                                            Constants.IERS96_EARTH_FLATTENING,
+                                            bodyFrame);
             case IERS2003 :
-                return new OneAxisEllipsoid(6378136.6, 1.0 / 298.25642, bodyFrame);
+                return new OneAxisEllipsoid(Constants.IERS2003_EARTH_EQUATORIAL_RADIUS,
+                                            Constants.IERS2003_EARTH_FLATTENING,
+                                            bodyFrame);
             default :
                 // this should never happen
                 throw new RuggedInternalError(null);

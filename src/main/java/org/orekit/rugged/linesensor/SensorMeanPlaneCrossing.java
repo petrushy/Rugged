@@ -1,5 +1,5 @@
-/* Copyright 2013-2019 CS Systèmes d'Information
- * Licensed to CS Systèmes d'Information (CS) under one or more
+/* Copyright 2013-2022 CS GROUP
+ * Licensed to CS GROUP (CS) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * CS licenses this file to You under the Apache License, Version 2.0
@@ -152,7 +152,7 @@ public class SensorMeanPlaneCrossing {
 
         this.meanPlaneNormal             = meanPlaneNormal;
 
-        this.cachedResults               = new ArrayList<CrossingResult>(CACHED_RESULTS);
+        this.cachedResults               = new ArrayList<>(CACHED_RESULTS);
         cachedResults.forEach(crossingResult -> {
             if (crossingResult != null && this.cachedResults.size() < CACHED_RESULTS) {
                 this.cachedResults.add(crossingResult);
