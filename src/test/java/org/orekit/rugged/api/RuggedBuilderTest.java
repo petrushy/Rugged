@@ -58,7 +58,7 @@ import org.orekit.frames.Transform;
 import org.orekit.orbits.CircularOrbit;
 import org.orekit.orbits.Orbit;
 import org.orekit.orbits.OrbitType;
-import org.orekit.orbits.PositionAngle;
+import org.orekit.orbits.PositionAngleType;
 import org.orekit.propagation.Propagator;
 import org.orekit.propagation.SpacecraftState;
 import org.orekit.propagation.analytical.KeplerianPropagator;
@@ -165,6 +165,11 @@ public class RuggedBuilderTest {
             Assert.assertEquals(RuggedMessages.UNINITIALIZED_CONTEXT, re.getSpecifier());
             Assert.assertEquals("RuggedBuilder.setEllipsoid()", re.getParts()[0]);
         }
+        
+        Assert.assertTrue(builder.isOverlappingTiles());
+        builder.setOverlappingTiles(false);
+        Assert.assertTrue(!builder.isOverlappingTiles());
+        
         builder.setEllipsoid(EllipsoidId.GRS80, BodyRotatingFrameId.ITRF);
         try {
             builder.build();
@@ -758,7 +763,7 @@ public class RuggedBuilderTest {
                                  -4.029194321683225E-4, 0.0013530362644647786,
                                  FastMath.toRadians(98.63218182243709),
                                  FastMath.toRadians(77.55565567747836),
-                                 FastMath.PI, PositionAngle.TRUE,
+                                 FastMath.PI, PositionAngleType.TRUE,
                                  eme2000, date, mu);
     }
 

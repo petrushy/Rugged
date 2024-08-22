@@ -53,7 +53,7 @@ import org.orekit.orbits.FieldEquinoctialOrbit;
 import org.orekit.orbits.FieldKeplerianOrbit;
 import org.orekit.orbits.Orbit;
 import org.orekit.orbits.OrbitType;
-import org.orekit.orbits.PositionAngle;
+import org.orekit.orbits.PositionAngleType;
 import org.orekit.propagation.Propagator;
 import org.orekit.propagation.SpacecraftState;
 import org.orekit.propagation.analytical.KeplerianPropagator;
@@ -217,11 +217,13 @@ public class TestUtils {
         //  gravity.field.order                 = 12
         AbsoluteDate date = new AbsoluteDate("2012-01-01T00:00:00.000", TimeScalesFactory.getUTC());
         Frame eme2000 = FramesFactory.getEME2000();
+        
+        // Observation satellite about 800km above ground
         return new CircularOrbit(7173352.811913891,
                                  -4.029194321683225E-4, 0.0013530362644647786,
                                  FastMath.toRadians(98.63218182243709),
                                  FastMath.toRadians(77.55565567747836),
-                                 FastMath.PI, PositionAngle.TRUE,
+                                 FastMath.PI, PositionAngleType.TRUE,
                                  eme2000, date, mu);
     }
  
