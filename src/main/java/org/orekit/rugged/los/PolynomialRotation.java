@@ -1,4 +1,4 @@
-/* Copyright 2013-2022 CS GROUP
+/* Copyright 2013-2025 CS GROUP
  * Licensed to CS GROUP (CS) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -96,7 +96,7 @@ public class PolynomialRotation implements LOSTransform {
             }
 
             @Override
-            public void valueSpanMapChanged​(final TimeSpanMap<Double> previousValueSpanMap, final ParameterDriver driver) {
+            public void valueSpanMapChanged(final TimeSpanMap<Double> previousValueSpanMap, final ParameterDriver driver) {
                 // reset rotations to null, they will be evaluated lazily if needed
                 angle   = null;
                 axisDS  = null;

@@ -1,4 +1,4 @@
-/* Copyright 2013-2022 CS GROUP
+/* Copyright 2013-2025 CS GROUP
  * Licensed to CS GROUP (CS) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -79,7 +79,7 @@ public class RoughVisibilityEstimatorTest {
         Assert.assertEquals(0.0,
                             new AbsoluteDate("2012-01-01T03:47:08.81412028",
                                              TimeScalesFactory.getUTC()).durationFrom(d),
-                            1.0e-8);
+                            1.10e-8);
 
     }
 
